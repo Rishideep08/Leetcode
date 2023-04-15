@@ -1,74 +1,89 @@
 class Solution {
-private :
-    vector<int> parent;
-public:
-    int findParent(int u){
-        if(u==parent[u]){
-            return u;
-        }
-        
-        // decreases the depth.
-        parent[u] = findParent(parent[u]);
-        
-        return parent[u];
-    }
+private : 
     
-    void doUnion(int u,int v){
-        int parent_u = findParent(u);
-        int parent_v = findParent(v);
+    class Edge{
+        public:
+            Edge(int v,int w) : v(v),w(w){}
         
-        if(parent_u != parent_v){
-            parent[parent_u] = v;
-        }
-    }
+            int v;
+            int w;
+
+    };
+    
+    vector<vector<Edge>> adjList;
+    
+public:
+    
+    class MSTNode{        
+        public:
+           int key;
+            int value;
+            MSTNode(int key,int value):key(key),value(value){
+                
+            }
+    };
+    
+    class Compare{
+        public:
+            bool operator()(MSTNode m1, MSTNode m2){
+                if(m1.value >= m2.value){
+                    return true;
+                }
+                return false;
+            }
+    };
+    
     
     int minCostConnectPoints(vector<vector<int>>& points) {
+//         prim's solution
         int n = points.size();
-        vector<vector<int>> edges;
+        adjList = vector<vector<Edge>>(n);
+        priority_queue<MSTNode,vector<MSTNode>,Compare> MstTree;
+        unordered_set<int> foundSet;
         for(int i=0;i<n;i++){
             for(int j=0;j<i;j++){
-                int w = abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]);
-                vector<int> edge = {w,i,j};
-                edges.push_back(edge);
+                int w=abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]);
+                adjList[i].push_back(Edge(j,w));
+                adjList[j].push_back(Edge(i,w));
+            }
+            if(i==0){
+                MstTree.push(MSTNode(i,0));
+            }else{
+                MstTree.push(MSTNode(i,INT_MAX));
             }
         }
         
-        sort(edges.begin(),edges.end());
-        parent = vector<int>(n);
-        for(int i=0;i<n;i++){
-            parent[i] = i;
-        }
-        
-        int sum = 0;
-        
-        for(int i=0;i<edges.size();i++){
-            
-            int u = edges[i][1];
-            int v = edges[i][2];
-            int w = edges[i][0];
-            
-            int parent_u = findParent(u);
-            int parent_v = findParent(v);
-            
-            if(parent_u != parent_v){
-                // cout<<u<<" "<<v<<" "<<parent_u<<" "<<parent_v<<endl;
-                sum = sum+w;
-                doUnion(u,v);
+        long long sum = 0;
+
+        while(foundSet.size() != n){
+            MSTNode newVertex = MstTree.top();
+            MstTree.pop();
+            int u = newVertex.key;
+            if(foundSet.find(u) == foundSet.end()){
+                sum = sum + newVertex.value;
+                foundSet.insert(u);
+            }else{
+                continue;
             }
             
-            // cout<<"-------- parent start"<<endl;
-            // for(int i=0;i<parent.size();i++){
-            //     cout<<parent[i]<<" ";
-            // }
-            // cout<<endl;
-            // cout<<"--------parent end"<<endl;
-            
-            
-            
-            
+            for(int i=0;i<adjList[u].size();i++){
+                int v = adjList[u][i].v;
+                int w = adjList[u][i].w;
+                
+                if(foundSet.find(v) == foundSet.end()){
+                    MstTree.push(MSTNode(v,w));
+                }
+                
+            }
         }
         
         return sum;
+        
+        
+        
+        
+        
+        
         
     }
 };
