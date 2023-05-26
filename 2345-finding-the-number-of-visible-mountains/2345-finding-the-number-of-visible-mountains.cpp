@@ -1,20 +1,13 @@
 class Solution {
 public:
-    int visibleMountains(vector<vector<int>>& peaks) {
-        if(peaks.size()==0){
+    int visibleMountains(vector<vector<int>>& startIndexes) {
+        if(startIndexes.size()==0){
             return 0;
         }
-        vector<vector<int>> startIndexes;
-        for(int i=0;i<peaks.size();i++){
-            vector<int> temp;
-            temp.push_back(peaks[i][0]-peaks[i][1]);
-            temp.push_back(peaks[i][1]);
-            startIndexes.push_back(temp);
+        for(int i=0;i<startIndexes.size();i++){
+            startIndexes[i][0] = startIndexes[i][0]-startIndexes[i][1]; 
         }
         sort(startIndexes.begin(),startIndexes.end());
-        // for(int i=0;i<startIndexes.size();i++){
-        //     cout<<startIndexes[i][0]<<" "<<startIndexes[i][1]<<endl;
-        // }
         int ans = 1;
         int activeEnd_x = startIndexes[0][0]+2*startIndexes[0][1];
         int activeHeight = startIndexes[0][1];
