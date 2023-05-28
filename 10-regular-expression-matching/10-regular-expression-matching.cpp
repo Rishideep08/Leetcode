@@ -1,68 +1,57 @@
 class Solution {
 public:
-    int dp[30][30];
-    bool checkValid(string s, string p, int i,int j){
-        if(i<s.size() && j<p.size()){
-            if(p[j] == '.' || s[i] == p[j]){
-                return true;
+    vector<vector<int>> dp;
+    int func(string s,string p,int i,int j){
+
+        if(i<s.size() &&j==p.size()){
+            return 0;
+        }
+        
+        if(i==s.size() && j==p.size()){
+            return 1;
+        }
+        
+        if(i==s.size() && j<p.size()){
+            while(j<p.size()){
+                if(p[j] == '*'){
+                    j++;
+                }else if(j+1<p.size() && p[j+1]=='*'){
+                    j=j+2;
+                }else{
+                    return 0;
+                }
             }
+            return 1;
         }
-        return false;
-    }
-   
-    bool func(string s, string p,int i,int j){
-        if(i>=s.size() && j>=p.size()){
-            return true;
+        
+        
+        if(dp[i][j] !=-1){
+            return dp[i][j];
         }
-        if(i<s.size() && j>=p.size()){
-            return false;
-        }
-        // cout<<i<<" "<<j<<" "<<dp[i][j]<<endl;
-        if(dp[i][j] != -1){
-            if(dp[i][j] == 1){
-                return true;
+        
+        
+        if(j+1<p.size() && p[j+1] == '*'){
+            int x = func(s,p,i,j+2);
+            if(s[i] == p[j] || p[j]=='.'){
+               x = x || func(s,p,i+1,j);
             }
-            return false;
-        }
-        char nextChar = 'A';
-        if(j<p.size()-1){
-            nextChar = p[j+1];
-        }
-        bool x;
-        if(nextChar == '*'){
-            x = func(s,p,i,j+2);
-            if(x == true){
-                dp[i][j] = 1;
-                return true;
-            }
-            if(checkValid(s,p,i,j)){
-                bool temp = func(s,p,i+1,j);
-                dp[i][j] = (temp==true?1:0);
-                return temp;
+            dp[i][j] = x;
+        }else{
+            if(s[i] == p[j] || p[j] =='.'){
+                dp[i][j] = func(s,p,i+1,j+1);
             }else{
                 dp[i][j] = 0;
-                return false;
             }
-        }else{
-            if(checkValid(s,p,i,j)){
-                bool temp = func(s,p,i+1,j+1);
-                dp[i][j] = (temp==true?1:0);
-                return temp;
-            }
-            dp[i][j] = 0;
+        }
+
+        return dp[i][j];
+    }
+    bool isMatch(string s, string p) {  
+        dp = vector<vector<int>>(100,vector<int>(100,-1));
+        if(func(s,p,0,0)==0){
             return false;
         }
-       dp[i][j] = 1;
-       return true;    
-    }
-    
-    
-    bool isMatch(string s, string p) {
-        for(int i=0;i<30;i++){
-            for(int j=0;j<30;j++){
-                dp[i][j] = -1;
-            }
-        }
-       return func(s,p,0,0);
+        return true;
+        
     }
 };
