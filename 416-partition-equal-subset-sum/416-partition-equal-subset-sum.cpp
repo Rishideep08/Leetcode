@@ -10,18 +10,25 @@ public:
             return false;
         }
         int halfVal= sum/2;
-        vector<vector<int>>dp(n+1,vector<int>(halfVal+1,0));
-        dp[0][0] = 1;
+        // vector<vector<int>>dp(2,vector<int>(halfVal+1,0));
+        vector<int> prev(halfVal+1,0);
+        vector<int> curr(halfVal+1,0);
+        // dp[0][0] = 1;
+        prev[0] = 1;
         
         for(int i=1;i<=n;i++){
             for(int j=1;j<=halfVal;j++){
-                dp[i][j] = dp[i-1][j];
+                curr[j] = prev[j];
                 if(j>=nums[i-1]){
-                    dp[i][j] = dp[i][j] || dp[i-1][j-nums[i-1]];
-                }
+                    curr[j] = curr[j] || prev[j-nums[i-1]];
+                }  
+            }
+            prev = curr;
+            for(int j=0;j<=halfVal;j++){
+                curr[0] = 0;
             }
         }
-        return dp[n][halfVal]==1?true:false;
+        return curr[halfVal]==1?true:false;
         
     }
 };
