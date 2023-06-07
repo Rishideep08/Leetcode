@@ -3,12 +3,9 @@ public:
     int snap_id=0;
     vector<map<int,int>> list;
     SnapshotArray(int length) {
-        // list = vector<map<int,int>> (length); 
+        list = vector<map<int,int>> (length); 
         for(int i=0;i<length;i++){
-            map<int,int> temp;
-            temp[snap_id] = 0;
-            list.push_back(temp);
-            // list[inde]
+            list[i][snap_id] = 0;
         }
     }
     
