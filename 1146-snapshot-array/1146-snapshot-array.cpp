@@ -2,26 +2,22 @@ class SnapshotArray {
 public:
     int snap_id=0;
     vector<map<int,int>> list;
-    unordered_map<int,int> um1;
     SnapshotArray(int length) {
+        // list = vector<map<int,int>> (length); 
         for(int i=0;i<length;i++){
             map<int,int> temp;
             temp[snap_id] = 0;
             list.push_back(temp);
+            // list[inde]
         }
     }
     
     void set(int index, int val) {
-        um1[index] = val;
-        
+         list[index][snap_id] = val;
         return;
     }
     
     int snap() {
-        for(auto itr = um1.begin();itr!=um1.end();itr++){
-            list[itr->first][snap_id] = itr->second;
-        }
-        um1.clear();
         snap_id++;
         return snap_id-1;
     }
