@@ -12,7 +12,7 @@
 class Solution {
 public:
     long long int ans;
-    unordered_map<long long int,int> um;
+    unordered_map<long long int,long long int> um;
     
     void func(TreeNode* root,long long int sum,int targetSum){
         if(root == NULL){
