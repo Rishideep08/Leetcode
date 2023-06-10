@@ -1,14 +1,7 @@
 class Solution {
 public:
-    class compareMeetings{
-        public:
-            bool operator()(vector<int>&a,vector<int>&b){
-                return a[0]<b[0];   
-            }
-    };
-    
     int mostBooked(int n, vector<vector<int>>& meetings) {
-        sort(meetings.begin(),meetings.end(),compareMeetings());
+        sort(meetings.begin(),meetings.end());
         priority_queue<int,vector<int>,greater<int>> room_priority;
         priority_queue<pair<long long int,int>,vector<pair<long long int,int>>,greater<pair<long long int,int>>>pq;
         for(int i=0;i<n;i++){
@@ -27,7 +20,6 @@ public:
             if(!room_priority.empty()){
                 int room = room_priority.top();
                 room_priority.pop();
-                // lookup[i] = room;
                 res[room]++;
                 pq.push({meetings[i][1],room});
             }else{
@@ -36,11 +28,8 @@ public:
                 pq.pop();
                 // lookup[i] = lookup[j];
                 res[j]++;
-                // cout<<meetings[i][1]+delay<< " "<<i<<endl; 
                 pq.push({meetings[i][1]+delay,j});
             }
-            
-            // cout<<i<<" "<<lookup[i]<<" "<<room_priority.size()<<endl;
         }
         
         // vector<int> res(n,0);
