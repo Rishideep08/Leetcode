@@ -5,20 +5,20 @@
 class Solution {
 public:
     int func(){
-        int x= (rand7()-1)%7+(rand7());
-        if(x<=40){
-            return (x-1) % 10 + 1;
+        int x= (rand7()-1)*7+(rand7()-1);
+        if(x<40){
+            return 1+x/4;
         }
         return func();
     }
     int rand10() {
-        int row, col, idx;
-        do {
-            row = rand7();
-            col = rand7();
-            idx = col + (row - 1) * 7;
-        } while (idx > 40);
-        return 1 + (idx - 1) % 10;
-        // return func();
+        // int row, col, idx;
+        // do {
+        //     row = rand7();
+        //     col = rand7();
+        //     idx = col + (row - 1) * 7;
+        // } while (idx > 40);
+        // return 1 + (idx - 1) % 10;
+        return func();
     }
 };
