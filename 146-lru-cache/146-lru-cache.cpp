@@ -1,124 +1,43 @@
 class LRUCache {
-private : 
-    class Node{
-        public:
-            int key;
-            int val;
-            Node* next;
-            Node* prev;
-            Node(int key, int val){
-                this->key = key;
-                this->val = val;
-                this->next = NULL;
-                this->prev = NULL;
-            }
-    };
-    int n;
-    Node* head;
-    Node* last;
-    unordered_map<int,Node*>um;
 public:
+    int n;
+    list<pair<int,int>> lru;
+    unordered_map<int,list<pair<int,int>>::iterator> um;
     LRUCache(int capacity) {
         this->n = capacity;
-        this->head = NULL;
-        this->last = NULL;
     }
     
-    void print(Node* head){
-        cout<<"Start-----"<<endl;
-        while(head!=NULL){
-            cout<<head->key<<" "<<head->val<<endl;
-            head = head->next;
-        }
-        cout<<"End------"<<endl;
-        
-    }
-    
-    void printLast(Node* head){
-        cout<<"Start-----"<<endl;
-        while(head!=NULL){
-            cout<<head->key<<" "<<head->val<<endl;
-            head = head->prev;
-        }
-        cout<<"End------"<<endl;
-        
-        
-    }
     int get(int key) {
-        // cout<<"get "<< key<<endl;
-        if(um.find(key) != um.end()){
-            Node* node = um[key];
-            Node* prevNode = node->prev;
-            Node* nextNode = node->next;
-
-            if(prevNode!=NULL){
-                prevNode->next = nextNode;
-                if(nextNode!=NULL){
-                    nextNode->prev = prevNode;
-                }else{
-                    last = prevNode;
-                }
-                node->next = head;
-                node->prev = NULL;
-                head->prev = node;
-                head = node;
-            }
-            // print(head);
-            return um[key]->val;
-        }else{
-            return -1;
-        }
-        
-        
+       if(um.find(key) != um.end()){
+           pair<int,int> kv = *um[key];
+           
+           lru.erase(um[key]);
+           lru.push_front({key,kv.second});
+           um[key] = lru.begin();
+           return kv.second;
+       }
+        return -1;
     }
     
     void put(int key, int value) {
-        // cout<<"put "<< key<<" "<<value<<endl;
-        if(um.find(key)!=um.end()){
-            Node* node = um[key];
-            node->val = value;
-            Node* prevNode = node->prev;
-            Node* nextNode = node->next;
-            if(prevNode!=NULL){
-                prevNode->next = nextNode;
-                if(nextNode!=NULL){
-                    nextNode->prev = prevNode;
-                }else{
-                    last = prevNode;
-                }
-                node->next = head;
-                node->prev = NULL;
-                head->prev = node;
-                head = node;
-            }
-        }else{
-            if(um.size() == this->n){
-                um.erase((this->last)->key);
-                this->last = (this->last)->prev;
-                if((this->last) == NULL){
-                    this->head = NULL;
-                }else{
-                    (this->last)->next = NULL;
-                }
-            }
-            Node* temp = new Node(key,value);
-            temp->next = this->head;
-            if(this->head!=NULL){
-                (this->head)->prev = temp;
-            }
-            (this->head) = temp;
-            if(last == NULL){
-                last = (this->head);
-            }
-            um[key] = (this->head);  
+        
+        if(um.find(key) != um.end()){
+            lru.erase(um[key]);
+            um.erase(key);
         }
-        // if(key == 9 && value == 3){
-        //     print(head);
-        //     printLast(last);
-        // }
+        
+    
+        
+        lru.push_front({key,value});
+        list<pair<int,int>>::iterator itr = lru.begin();
+        um[key] = itr ;
+        
+        if(um.size()>n){
+            um.erase(lru.rbegin()->first);
+            lru.pop_back();
+        }
+        
     }
-    
-    
 };
 
 /**
