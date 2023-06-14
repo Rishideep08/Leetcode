@@ -24,7 +24,15 @@ public:
                     r = m-1;
                 }
             }else{
-                l = l+1;
+                if(nums[l] == target){
+                    return l;
+                }
+                while(l<=r && nums[l]==nums[m]){
+                    l++;
+                }
+                while(l<=r && nums[r] == nums[m]){
+                    r--;
+                }
             }
             
         }
