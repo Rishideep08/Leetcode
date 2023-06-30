@@ -21,7 +21,7 @@ public:
     
     long long countTheNumOfKFreeSubsets(vector<int>& nums, int k) {
         sort(nums.begin(),nums.end());
-        map<long long ,long long> um;
+        unordered_map<long long ,long long> um;
         // int maxVal = nums[nums.size()-1];
         for(long long i=0;i<nums.size();i++){
             um[nums[i]]++;
@@ -31,6 +31,7 @@ public:
         while(um.size()>0){
             auto itr = um.begin();
             int start = itr->first;
+            int start1 = start;
             vector<long long> temp;
             while(um.find(start)!= um.end()){
                 // cout<<" itr "<< start<<endl;
@@ -40,6 +41,16 @@ public:
                     um.erase(start);
                 }
                 start = start+k;
+            }
+            start = start1-k;
+            while(um.find(start)!= um.end()){
+                // cout<<" itr "<< start<<endl;
+                temp.push_back(start);
+                um[start]--;
+                if(um[start] == 0){
+                    um.erase(start);
+                }
+                start = start-k;
             }
             // cout<<um.size()<<" adb "<<endl;
             res.push_back(calculateWays(temp));
