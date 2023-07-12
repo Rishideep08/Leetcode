@@ -80,15 +80,27 @@ public:
         for(int i=0;i<n;i++){
             doBfs(i);
         }
-        
         vector<int> res;
-        for(int i=0;i<query.size();i++){
-            if(query[i][0]>query[i][1]){
-                swap(query[i][0],query[i][1]);
+        for(int j=0;j<query.size();j++){
+            int minVal = INT_MAX;
+            int ans = query[j][0];
+            for(int i=0;i<n;i++){
+                if(minVal>(lookup[i][query[j][0]]+lookup[i][query[j][1]]+lookup[i][query[j][2]])){
+                    minVal = lookup[i][query[j][0]]+lookup[i][query[j][1]]+lookup[i][query[j][2]];
+                    ans = i;
+                }
             }
-            // cout<<query[i][0]<<" "<<query[i][1]<<endl;
-            res.push_back(doDFS(query[i][0],query[i][1],query[i][2]));
+            res.push_back(ans);
         }
+        
+        
+        // for(int i=0;i<query.size();i++){
+        //     if(query[i][0]>query[i][1]){
+        //         swap(query[i][0],query[i][1]);
+        //     }
+        //     // cout<<query[i][0]<<" "<<query[i][1]<<endl;
+        //     res.push_back(doDFS(query[i][0],query[i][1],query[i][2]));
+        // }
         
         return res;
     }
