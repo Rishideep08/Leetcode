@@ -1,22 +1,46 @@
-class LRUCache {
+class LRUCache {    
+    int n ;
     LinkedHashMap<Integer,Integer> lhm;
-    int n;
     public LRUCache(int capacity) {
+        lhm = new LinkedHashMap<>();
         this.n = capacity;
-        lhm = new LinkedHashMap<>(n,0.5f,true){
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<Integer,Integer> entry){
-                return size() > n;
-            }
-        };
+    }
+    
+    void helper(int key){
+        Integer x = 
+        
+        lhm.remove(key);
     }
     
     public int get(int key) {
-        return lhm.getOrDefault(key,-1);
+        if(!lhm.containsKey(key)){
+            return -1;
+        }
+        int val = lhm.get(key);
+        lhm.remove(key);
+        lhm.put(key,val);
+        return val;
     }
     
     public void put(int key, int value) {
+        if(lhm.containsKey(key)){
+            lhm.remove(key);
+            lhm.put(key,value);
+            return;
+        }
+        
+        if(n==0){
+            int x = lhm.keySet().iterator().next();
+            lhm.remove(x);
+        }else{
+            n--;
+        }
+        
         lhm.put(key,value);
+        
+        return;
+        
+        
     }
 }
 
