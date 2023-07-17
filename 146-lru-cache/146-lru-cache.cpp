@@ -1,41 +1,46 @@
 class LRUCache {
 public:
+    unordered_map<int,pair<int,list<int>::iterator>> kv;
+    list<int> order;
     int n;
-    list<pair<int,int>> lru;
-    unordered_map<int,list<pair<int,int>>::iterator> um;
     LRUCache(int capacity) {
-        this->n = capacity;
+        n = capacity;
     }
     
     int get(int key) {
-       if(um.find(key) != um.end()){
-           pair<int,int> kv = *um[key];
-           
-           lru.erase(um[key]);
-           lru.push_front({key,kv.second});
-           um[key] = lru.begin();
-           return kv.second;
-       }
-        return -1;
+        if(kv.find(key) == kv.end()){
+            return -1;
+        }
+        
+        order.erase(kv[key].second);
+        
+        order.push_back(key);
+        
+        // list<int>::iterator itr = prev(order.end());
+        
+        kv[key].second = prev(order.end());
+        
+        return kv[key].first;
     }
     
     void put(int key, int value) {
-        
-        if(um.find(key) != um.end()){
-            lru.erase(um[key]);
-            um.erase(key);
+        if(kv.find(key) != kv.end()){
+            order.erase(kv[key].second);            
+        }else{
+            if(n==0){
+                int k = *order.begin();
+                kv.erase(k);
+                order.pop_front();
+            }else{
+                n--;
+            }
         }
         
-    
-        
-        lru.push_front({key,value});
-        list<pair<int,int>>::iterator itr = lru.begin();
-        um[key] = itr ;
-        
-        if(um.size()>n){
-            um.erase(lru.rbegin()->first);
-            lru.pop_back();
-        }
+        order.push_back(key);
+
+        kv[key].second = prev(order.end());
+        kv[key].first = value;
+        return;
         
     }
 };
