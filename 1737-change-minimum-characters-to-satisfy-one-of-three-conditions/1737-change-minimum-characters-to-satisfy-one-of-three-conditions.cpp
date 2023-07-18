@@ -1,54 +1,60 @@
 class Solution {
-private: 
-    enum OperationType{
-        LESS,
-        GREATER,
-        EQUAL,
-    };
-    vector<int> convertionFunc(string str,OperationType val){
-        vector<int> ans;
-        for(int j=0;j<26;j++){
-            char ch = 'a'+j;
-            int count = 0;
-            for(int i=0;i<str.size();i++){
-                if(val == LESS){
-                    if(str[i]>ch){
-                        count++;
-                    } 
-                }else if(val == GREATER){
-                    if(str[i]<ch){
-                        count++;
-                    }   
-                }else{
-                    if(str[i]!=ch){
-                        count++;
-                    }
-                }
-                
-            }
-            ans.push_back(count);
+public:
+    int helper(string a,string b){
+        int i=0,j=0;
+        vector<int> arr(26,0),arr1(26,0);
+        for(int i=0;i<a.size();i++){
+            arr[a[i]-'a']++;
         }
+        
+        for(int i=0;i<b.size();i++){
+            arr1[b[i]-'a']++;
+        }
+        
+        for(int i=1;i<26;i++){
+            arr[i]+=arr[i-1];
+            arr1[i]+=arr1[i-1];
+        }
+        int ans = INT_MAX;
+        for(int i=1;i<26;i++){
+            int val = a.size();
+            if(i!=0){
+                val = val-arr[i-1];
+            }
+            int val1 = 0;
+            if(i!=0){
+                val1 = val1+arr1[i-1];
+            }
+            ans = min(ans,val+val1);
+        }
+        // cout<<ans<<endl;
         return ans;
     }
-
-
-    int minValFunc(string a, string b){
-        vector<int> l1 = convertionFunc(a,LESS);
-        vector<int> r1 = convertionFunc(b,GREATER);
-        vector<int> e1 = convertionFunc(a,EQUAL);
-        vector<int> e2 = convertionFunc(b,EQUAL);
-        int minVal = INT_MAX;
-        for(int i=0;i<26;i++){
-            if(i!=25){
-                int j = i+1;
-                minVal = min(minVal,l1[i]+r1[j]);
-            }
-            minVal = min(minVal,e1[i]+e2[i]);
+    
+    int helper2(string a,string b){
+        unordered_map<int,int> um;
+        for(int i=0;i<a.size();i++){
+            um[a[i]]++;
         }
-        return minVal;
-    }
-public:
+        for(int i=0;i<b.size();i++){
+            um[b[i]]++;
+        }
+        
+        int val = a.size()+b.size();
+        int ans = INT_MAX;
+        for(int i=0;i<26;i++){
+            ans = min(ans,val-um['a'+i]);
+        }
+        // cout<<ans;
+        
+        return ans;
+        
+    }    
+    
+    
     int minCharacters(string a, string b) {
-        return min(minValFunc(a,b),minValFunc(b,a));
+        
+        return min(helper(a,b),min(helper(b,a),helper2(a,b)));
+        
     }
 };
