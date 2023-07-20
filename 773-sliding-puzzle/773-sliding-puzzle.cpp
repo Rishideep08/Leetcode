@@ -49,8 +49,9 @@ public:
         
         int dx[]={-1,0,0,1};
         int dy[]={0,-1,1,0};
-        queue<vector<vector<int>>> q;
-        q.push(board);
+        char dz[] = {'U','L','R','D'};
+        queue<pair<vector<vector<int>>,string>> q;
+        q.push({board,""});
         string x1 = convertVectortoString(board);
         us.insert(x1);
         int val = INT_MAX;
@@ -58,7 +59,8 @@ public:
         while(!q.empty()){
             int n1 = q.size();
             while(n1){
-                vector<vector<int>> temp = q.front();
+                vector<vector<int>> temp = q.front().first;
+                string str = q.front().second;
                 q.pop();
                 
                 // for(int i=0;i<temp.size();i++){
@@ -70,6 +72,7 @@ public:
                 // cout<<"------\n";
                 
                 if(check(temp)){
+                    cout<<str<<endl;
                     return level;
                 }
                 
@@ -93,7 +96,7 @@ public:
                         swap(temp[r][c],temp[r1][c1]);
                         string x = convertVectortoString(temp);
                         if(us.find(x) == us.end()){
-                            q.push(temp);
+                            q.push({temp,str + dz[i]});
                             us.insert(x);
                         }
                         swap(temp[r][c],temp[r1][c1]);
