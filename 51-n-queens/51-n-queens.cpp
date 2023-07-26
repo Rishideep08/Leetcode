@@ -24,26 +24,6 @@ public:
         
         r1 = r;
         c1 = c;
-        while(r1<n && c1<n){
-            if(pattern[r1][c1] =='Q'){
-                return false;
-            }
-            r1++;
-            c1++;
-        }
-        
-        r1 = r;
-        c1 = c;
-        while(r1<n && c1>=0){
-            if(pattern[r1][c1] =='Q'){
-                return false;
-            }
-            r1++;
-            c1--;
-        }
-        
-        r1 = r;
-        c1 = c;
         while(r1>=0 && c1<n){
             if(pattern[r1][c1] =='Q'){
                 return false;
@@ -51,13 +31,6 @@ public:
             r1--;
             c1++;
         }
-        
-        
-        // for(int i=0;i<n;i++){
-        //     if(pattern[r][i] == 'Q' ){
-        //         return false;
-        //     }
-        // }
         
         return true;
     }
