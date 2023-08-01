@@ -8,28 +8,21 @@ public:
         }
         // onBulbs.insert(bulbs[0]);
         for(int i=0;i<bulbs.size();i++){
+            onBulbs.insert(bulbs[i]);
             auto u1 = onBulbs.upper_bound(bulbs[i]);
+            auto l1 = onBulbs.lower_bound(bulbs[i]);
             if(u1 != onBulbs.end()){
                 if(*u1-bulbs[i]-1==k){
                     return i+1;
                 }
-                if(u1 != onBulbs.begin()){
-                    auto l1 = prev(u1);
-                    if(bulbs[i]-*l1-1==k){
-                        return i+1;
-                    }
-                }
-            }else{
-                if(u1 != onBulbs.begin()){
-                    // cout<<"HI"<<endl;
-                    auto l1 = prev(u1);
-                    // cout<<*l1<<endl;
-                    if(bulbs[i]-*l1-1==k){
-                        return i+1;
-                    }
-                }
             }
-            onBulbs.insert(bulbs[i]);
+            
+            if(l1 != onBulbs.begin()){
+                l1 = prev(l1);
+                if(bulbs[i]-*l1-1==k){
+                    return i+1;
+                }
+            }    
         }
         
         return -1;
