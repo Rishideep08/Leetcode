@@ -2,11 +2,6 @@ class Solution {
 public:
     int kEmptySlots(vector<int>& bulbs, int k) {
         set<int> onBulbs;
-        int n=bulbs.size();
-        if(n<2){
-            return -1;
-        }
-        // onBulbs.insert(bulbs[0]);
         for(int i=0;i<bulbs.size();i++){
             onBulbs.insert(bulbs[i]);
             auto u1 = onBulbs.upper_bound(bulbs[i]);
