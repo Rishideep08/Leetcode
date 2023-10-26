@@ -7,14 +7,10 @@ public:
         int maxLen = 0;
         unordered_map<char,int> um;
         while(end<n){
-            while(um.find(s[end]) != um.end()){
-                um[s[start]]--;
-                if(um[s[start]] == 0){
-                    um.erase(s[start]);
-                }
-                start++;
+            if(um.find(s[end]) != um.end()){
+               start = max(start,um[s[end]]+1);
             }
-            um[s[end]]++;
+            um[s[end]] = end;
             maxLen = max(maxLen,end-start+1);
             end++;
         }
