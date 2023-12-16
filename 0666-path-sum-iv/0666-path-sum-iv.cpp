@@ -18,15 +18,15 @@ public:
                 int val = it->second;
                 int flag = 0;
                 if(um[i+1].find(2*key) != um[i+1].end()){
-                    um[i+1][2*key] += um[i][key];
+                    um[i+1][2*key] += val;
                     flag = 1;
                 } 
                 if(um[i+1].find(2*key-1) != um[i+1].end()){
-                    um[i+1][2*key-1] += um[i][key];
+                    um[i+1][2*key-1] += val;
                     flag = 1;
                 } 
                 if(flag == 0){
-                    ans = ans + um[i][key];
+                    ans = ans +val;
                 }
             }
         }
