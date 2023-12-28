@@ -10,28 +10,36 @@
  */
 class Solution {
 public:
-    ListNode* merge(ListNode* list1,ListNode* list2){
-        if(list1 == NULL){
-            return list2;
+    ListNode* merge(ListNode* l,ListNode* r){
+        if(l == NULL){
+            return r;
         }
-        if(list2 == NULL){
-            return list1;
+        if(r == NULL){
+            return l;
         }
-        
-        
-        if((list1->val) > (list2->val)){
-            list2->next = merge(list1,list2->next);
-            return list2;
+        if(l->val > r->val){
+            r->next = merge(l,r->next);
+            return r;
+        }        
+        l->next = merge(l->next,r);
+        return l;
+    }
+    ListNode* func(vector<ListNode*>& lists,int l,int r){
+        if(l==r){
+            return lists[l];
         }
-        list1->next = merge(list1->next,list2);
-        return list1;
+        if(l<r){
+            int m = l+(r-l)/2;
+            ListNode* l1 = func(lists,l,m);
+            ListNode* r1 = func(lists,m+1,r);
+            ListNode* ans = merge(l1,r1);
+            // cout<<ans->val<<endl;
+            return ans;
+        }
+        return NULL;
     }
     
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* ans = NULL;
-        for(int i=0;i<lists.size();i++){
-            ans = merge(ans,lists[i]);
-        }
-        return ans;
+        return func(lists,0,lists.size()-1);
     }
 };
