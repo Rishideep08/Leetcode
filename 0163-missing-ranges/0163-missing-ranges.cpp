@@ -16,12 +16,18 @@ public:
         for(int i =0;i<nums.size();i++){
             if(nums[i]>=l && nums[i]<=r){
                 flag = 1;
-                if(i==0 || nums[i-1]<l){
+                if(i==0){
+                    if(l<=nums[i]-1)
+                        res.push_back(func(l,nums[i]-1));
+                }else if(nums[i-1]<l){
                     if(l<=nums[i]-1)
                         res.push_back(func(l,nums[i]-1));
                 }
                 
-                if(i+1 == n || (nums[i+1]>r)){
+                if(i+1 == n){
+                     if(nums[i]+1<=r)
+                        res.push_back(func(nums[i]+1,r));
+                }else if (nums[i+1]>r){
                     if(nums[i]+1<=r)
                         res.push_back(func(nums[i]+1,r));
                 }else{
