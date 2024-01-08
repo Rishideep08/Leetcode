@@ -20,13 +20,6 @@ public:
         }
         
         sort(pairs.begin(),pairs.end(),comp);
-        
-        // for(int i=0;i<pairs.size();i++){
-        //     for(int j=0;j<pairs[i].size();j++){
-        //         cout<<pairs[i][j]<<" ";
-        //     }
-        //     cout<<endl;
-        // }
         int maxCovered = pairs[0][0];
         int i=0;
         while(i<pairs.size()){
@@ -34,22 +27,11 @@ public:
                 return -1;
             }
             int prevMaxCovered = maxCovered;
-            // int index = -1;
-            int flag = 0;
             while(i<pairs.size() && pairs[i][0]<=prevMaxCovered){
-                // if(pairs[i][1]>maxCovered){
-                //     index = max(index,i);
-                // }
                 maxCovered = max(pairs[i][1],maxCovered);
                 i++;
-                flag = 1;
             }
-            // if(flag == 1){
-            //     i--;
-            // }
-            // cout<<maxCovered<<" : "<<i<<endl;
             if(maxCovered>prevMaxCovered){
-                // cout<<"tap on at "<<index<<endl;
                 ans++;
             }
             
