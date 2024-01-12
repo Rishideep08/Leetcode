@@ -5,8 +5,7 @@ public:
         int count = 0;
         for(int i=0;i<nums.size();i++){
             if(nums[i]>maxVal){
-                if(nums[i]-maxVal>1){
-                    while(nums[i]-maxVal>1){
+                while(nums[i]-maxVal>1){
                         if(maxVal>=n){
                             return count;
                         }
@@ -14,9 +13,6 @@ public:
                         count++;
                     }
                     maxVal = maxVal+nums[i];
-                }else{
-                    maxVal =maxVal+nums[i];
-                }
             }else{
                  maxVal = maxVal+nums[i];
             }
