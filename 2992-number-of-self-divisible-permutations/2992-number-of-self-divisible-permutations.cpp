@@ -13,37 +13,27 @@ public:
         return gcd(a%b,b);
     }
     
-    bool doGCD(vector<int>&comb){
-        for(int i=0;i<comb.size();i++){
-            if(gcd(comb[i],i+1) != 1){
-                return false;
-            }
+    int generatePermutations(int n,int index,vector<int>&dp,int mask){
+        if(index == n){
+            return 1;
         }
-        return true;
-    }
-    void generatePermutations(int n,vector<int>&comb,vector<int>&visit,int index){
-        if(comb.size() == n){
-            count++;
-            return;
+        if(dp[mask] != -1){
+            return dp[mask];
         }
-        
-        for(int i=0;i<visit.size();i++){
-            if(visit[i] == 0){
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            if((mask&(1<<i))==0){
                 if(gcd(index+1,i+1) == 1){
-                    comb.push_back(i+1);
-                    visit[i] = 1;
-                    generatePermutations(n,comb,visit,index+1);
-                    visit[i]=0;
-                    comb.pop_back();
+                    ans = ans + generatePermutations(n,index+1,dp,(mask|(1<<i)));
                 }
             }
-
         }
-        return;
+        dp[mask] = ans;
+        return ans;
     }
     int selfDivisiblePermutationCount(int n) {
-        vector<int> comb,visit(n,0);
-        generatePermutations(n,comb,visit,0);
-        return count;
+        vector<int> dp = vector<int>(1<<(n),-1);
+        return generatePermutations(n,0,dp,0);
+        
     }
 };
