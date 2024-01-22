@@ -22,11 +22,12 @@ public:
         if (!mp.count(key))            
             return;
         auto itr = mp[key];            
-        auto itrPrev = prev(itr);      
+        auto itrPrev =prev(itr);      
         mp.erase(key);                 
         if (itr->first>1) {            
-            if (itr==ls.begin() || itr->first-1 > itrPrev->first)             
+            if (itr==ls.begin() || itr->first-1 > itrPrev->first) {
                 itrPrev = ls.insert(itr,{itr->first-1,{}});
+            }
             itrPrev->second.insert(key);
             mp[key] = itrPrev;         
         }
