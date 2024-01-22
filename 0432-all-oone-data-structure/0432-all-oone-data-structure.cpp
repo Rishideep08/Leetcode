@@ -27,6 +27,8 @@ public:
         if (itr->first>1) {            
             if (itr==ls.begin() || itr->first-1 > itrPrev->first) {
                 itrPrev = ls.insert(itr,{itr->first-1,{}});
+            }else{
+                 itrPrev =prev(itr); 
             }
             itrPrev->second.insert(key);
             mp[key] = itrPrev;         
