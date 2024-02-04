@@ -4,7 +4,7 @@ public:
         int shift = s[0]-'a';
         string res="";
         for(int i=0;i<s.size();i++){
-            char ch = (s[i]-shift+26)%26+'a';
+            char ch = (s[i]-'a'-shift+26)%26+'a';
             res = res + ch;
         }
         return res;
