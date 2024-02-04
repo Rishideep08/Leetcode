@@ -15,12 +15,17 @@ public:
         if(root==NULL){
             return 0;
         }
-        int l = rangeSumBST(root->left,low,high);
-        int r = rangeSumBST(root->right,low,high);
+        int midVal = 0;
         if(root->val>=low && root->val<=high){
-            return (root->val)+l+r;
+             midVal = root->val;
+             return midVal+rangeSumBST(root->left,low,high)+ rangeSumBST(root->right,low,high);
+        }else if(root->val >high){
+            return rangeSumBST(root->left,low,high);
+        }else if(root->val <low){
+            return rangeSumBST(root->right,low,high);
         }
-        return l+r;
+        
+        return 0;
          
     }
 };
