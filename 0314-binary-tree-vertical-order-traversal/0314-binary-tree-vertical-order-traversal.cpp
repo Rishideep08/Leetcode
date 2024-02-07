@@ -11,46 +11,41 @@
  */
 class Solution {
 public:
-    
     vector<vector<int>> verticalOrder(TreeNode* root) {
+        queue<pair<TreeNode*,int>> q;
         vector<vector<int>> ans;
         if(root == NULL){
             return ans;
         }
-        queue<pair<TreeNode*,int>> q;
         q.push({root,0});
+        int colStart = 0;
         unordered_map<int,vector<int>> um;
-        um[0].push_back(root->val);
-        int minVal = 0;
         while(!q.empty()){
             int size = q.size();
             while(size){
                 pair<TreeNode*,int> temp = q.front();
                 q.pop();
+                colStart = min(colStart,temp.second);
+                um[temp.second].push_back(temp.first->val);
                 
-                if(temp.first->left){
+                if(temp.first->left!=NULL){
                     q.push({temp.first->left,temp.second-1});
-                    um[temp.second-1].push_back(temp.first->left->val);
-                    minVal = min(minVal,temp.second-1);
                 }
                 
-                if(temp.first->right){
+                if(temp.first->right!=NULL){
                     q.push({temp.first->right,temp.second+1});
-                    um[temp.second+1].push_back(temp.first->right->val);
                 }
+                
                 
                 size--;
             }
         }
-        
-        while(um.size()>0){
-            ans.push_back(um[minVal]);
-            um.erase(minVal);
-            minVal++;
+
+        while(um.find(colStart)!=um.end()){
+            ans.push_back(um[colStart]);
+            um.erase(colStart);
+            colStart++;
         }
-        
         return ans;
-        
-        
     }
 };
