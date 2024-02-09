@@ -11,39 +11,61 @@
  */
 class Solution {
 public:
-    int ans;
+    int ans = 0;
     
-    pair<bool,vector<int>> helper(TreeNode *root){
+    vector<int> helper(TreeNode* root){        
+        vector<int> l;
+        vector<int> r;
         if(root == NULL){
-            return {true,{INT_MAX,INT_MIN,0}};
+            return vector<int>{1,INT_MAX,INT_MIN,0};
         }
-        pair<bool,vector<int>> l = helper(root->left);
-        pair<bool,vector<int>> r = helper(root->right);
-        
-        if(l.first == true && r.first == true){
-            int x = l.second[1];
-            int y = r.second[0];
-            int x1 = l.second[0];
-            int y1 = r.second[1];
-            if(x< root->val && y >root->val){
-                if(x == INT_MIN){
-                    x = root->val;
-                    x1 = root->val;
+        if(root->left == NULL && root->right==NULL){
+            ans = max(ans,1);
+            return vector<int>{1,root->val,root->val,1};
+        }
+        if(root->left == NULL || root->right == NULL){
+            if(root->left == NULL){
+                r = helper(root->right);
+                if(r[0] == 0){
+                    return vector<int>{0,INT_MAX,INT_MIN,0};
                 }
-                if(y == INT_MAX){
-                    y = root->val;
-                    y1 = root->val;
+                if(root->val < r[1]){
+                    ans = max(ans,r[3]+1);
+                    return vector<int>{1,root->val,r[2],r[3]+1};
                 }
-                ans = max(ans,l.second[2]+r.second[2]+1);
-                return {true,{x1,y1,l.second[2]+r.second[2]+1}};
+                
+                return vector<int>{0,INT_MAX,INT_MIN,0};
+            }else{
+                l = helper(root->left);
+                if(l[0] == 0){
+                    return vector<int>{0,INT_MAX,INT_MIN,0};
+                }
+                if(root->val > l[2]){
+                    ans = max(ans,l[3]+1);
+                    return vector<int>{1,l[1],root->val,l[3]+1};
+                }
+                
+                return vector<int>{0,INT_MAX,INT_MIN,0};
             }
-            return {false,{x,y,0}};
         }
         
-        return {false,{-1,-1,0}};
+        r = helper(root->right);
+        l = helper(root->left);
+        if(l[0] == 0 || r[0]==0){
+            return vector<int>{0,INT_MAX,INT_MIN,0};
+        }
+        
+        if(root->val>l[2] && root->val<r[1]){
+            ans = max(ans,l[3]+r[3]+1);
+            return vector<int>{1,l[1],r[2],l[3]+r[3]+1};
+        }
+        return vector<int>{0,INT_MAX,INT_MIN,0};
     }
     
     int largestBSTSubtree(TreeNode* root) {
+        if(root == NULL){
+            return 0;
+        }
         helper(root);
         return ans;
     }
