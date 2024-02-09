@@ -1,7 +1,7 @@
 class LRUCache {
 public:
-    unordered_map<int,list<pair<int,int>>::iterator> um;
     list<pair<int,int>> lru;
+    unordered_map<int,list<pair<int,int>>::iterator> um;
     int n;
     LRUCache(int capacity) {
         n = capacity;
@@ -11,32 +11,27 @@ public:
         if(um.find(key) == um.end()){
             return -1;
         }
-        
-        auto itr = um[key];
-        int val = itr->first;
-        lru.erase(itr);
-        lru.push_back({val,key});
-        um[key] = prev(lru.end());
+        int val = um[key]->first;
+        lru.erase(um[key]);
+        lru.push_front({val,key});
+        um[key] = lru.begin();
         return val;
     }
     
-    void put(int key, int val) {
-        if(um.find(key) == um.end()){
-            if(lru.size()==n){
-                um.erase(lru.front().second);
-                lru.pop_front();    
-            }
-            lru.push_back({val,key});
-             um[key] = prev(lru.end());
-        }else{
-            auto itr = um[key];
-            lru.erase(itr);
-            lru.push_back({val,key});
-            um[key] = prev(lru.end());
+    void put(int key, int value) {
+        if(um.find(key) != um.end()){
+            lru.erase(um[key]);
+            um.erase(key);
         }
-        
-        
-        
+        if(um.size()==n){
+            auto itr = prev(lru.end());
+            int removeKey = itr->second;
+            um.erase(removeKey);
+            lru.pop_back(); 
+        }
+        lru.push_front({value,key});
+        um[key] = lru.begin();
+        return;
     }
 };
 
