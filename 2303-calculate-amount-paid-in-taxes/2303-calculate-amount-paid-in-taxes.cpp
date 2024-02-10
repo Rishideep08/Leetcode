@@ -1,19 +1,19 @@
 class Solution {
 public:
     double calculateTax(vector<vector<int>>& brackets, int income) {
-        int n = brackets.size();
-        if(n==0){
-            return 0;
-        }
-        int i=0;
+        int incomeLeft = income;
+        double ans =0;
         int prev =0;
-        double ans = 0;
-        while(income>brackets[i][0]){
-            ans += (brackets[i][0]-prev)*(brackets[i][1]/100.0);
-            prev = brackets[i][0];
-            i++;
+        for(int i=0;i<brackets.size();i++){
+            incomeLeft = income-prev;
+            if((brackets[i][0]-prev)>=incomeLeft){
+                ans = ans + (incomeLeft*1.0)*(brackets[i][1]/100.0);
+                return ans;
+            }else{
+                ans = ans+(brackets[i][0]-prev)*(brackets[i][1]/100.0);
+                prev = brackets[i][0];
+            }
         }
-        ans+=(income-prev)*(brackets[i][1]/100.0);
         return ans;
     }
 };
