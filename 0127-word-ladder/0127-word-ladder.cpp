@@ -1,9 +1,11 @@
 class Solution {
 public:
-    bool check(string word1,string word2){
+    vector<vector<int>> adjList;
+    
+    bool checkOneDiff(string a,string b){
         int count = 0;
-        for(int i=0;i<word1.size();i++){
-            if(word1[i] != word2[i]){
+        for(int i=0;i<a.size();i++){
+            if(a[i] != b[i]){
                 count++;
             }
         }
@@ -11,54 +13,62 @@ public:
             return true;
         }
         return false;
-        
     }
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        bool aval = false;
-        int index = wordList.size();
+    
+    void createAdjList(vector<string>& wordList){
         for(int i=0;i<wordList.size();i++){
-            if(wordList[i] == beginWord){
-                aval = true;
-                index = i;
-                break;
-            }
-        }
-        
-        if(aval == false){
-            wordList.push_back(beginWord);
-        }
-        
-        int n = wordList.size();
-        vector<vector<int>> adjList(n);
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                if(check(wordList[i],wordList[j])){
+            for(int j=i+1;j<wordList.size();j++){
+                if(checkOneDiff(wordList[i],wordList[j])){
                     adjList[i].push_back(j);
                     adjList[j].push_back(i);
                 }
             }
         }
+    }
+    
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        
+        
+        wordList.push_back(beginWord);
+        int n = wordList.size();
+        adjList = vector<vector<int>>(n);
+        createAdjList(wordList);
+        
+        // for(int i=0;i<n;i++){
+        //     cout<<wordList[i]<<" : ";
+        //     for(int j=0;j<adjList[i].size();j++){
+        //         cout<<wordList[adjList[i][j]]<<" ";
+        //     }
+        //     cout<<endl;
+        // }
         
         queue<int> q;
-        q.push(index);
-        unordered_map<int,int> us;
-        us[index] = 1;
+        q.push(wordList.size()-1);
+        vector<int> visit(wordList.size(),0);
+        visit[wordList.size()-1] = 1;
+        int level =1;
         while(!q.empty()){
-            int u = q.front();
-            if(wordList[u] == endWord){
-                return us[u];
-            }
-            q.pop();
-            for(int i=0;i<adjList[u].size();i++){
-                int v = adjList[u][i];
-                if(us.find(v) == us.end()){
-                    q.push(v);
-                    us[v] = us[u]+1;
+            int size = q.size();
+            while(size){
+                int u = q.front();
+                q.pop();
+                
+                if(wordList[u] == endWord){
+                    return level;
                 }
+                for(int i=0;i<adjList[u].size();i++){
+                    int v = adjList[u][i];
+                    
+                    if(visit[v] == 0){
+                        q.push(v);
+                        visit[v] = 1;
+                    }
+                }
+                size--;
             }
+            level++;
         }
         
         return 0;
-        
     }
 };
