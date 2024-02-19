@@ -16,27 +16,48 @@ public:
 
 class Solution {
 public:
-    unordered_map<Node*,Node*> um;
-    
-    Node* createCopy(Node* node){
-        if(node == NULL){
-            return NULL;
-        }
-        Node* newNode = new Node(node->val);
-        um[node] = newNode;
-        return um[node];
+    Node* createNode(Node* node){
+        return new Node(node->val);
     }
     
     Node* copyRandomList(Node* head) {
         if(head == NULL){
-            return NULL;
+            return head;
         }
-        if(um.find(head) != um.end()){
-            return um[head];
+        Node* curr = head;
+        while(head){
+            Node* copy = new Node(head->val);
+            Node* next = head->next;
+            head->next=copy;
+            copy->next = next;
+            head = next;
         }
-        Node* copyNode = createCopy(head);
-        copyNode->next = copyRandomList(head->next);
-        copyNode->random = copyRandomList(head->random);
-        return copyNode;
+        
+        head = curr;
+        while(head){
+            Node* random = head->random;
+            if(random != NULL)
+                head->next->random = random->next;
+            head = head->next->next;
+        }
+        
+        head = curr;
+        Node* ans = head->next;
+        Node* temp = ans;
+         while(head){
+            head->next = ans->next;
+             head = head->next;
+            if(head != NULL){
+                ans->next = head->next;
+            }else{
+                ans->next = NULL;
+            }
+             ans = ans->next;
+        }
+        
+        return temp;
+        
+        
+        
     }
 };
