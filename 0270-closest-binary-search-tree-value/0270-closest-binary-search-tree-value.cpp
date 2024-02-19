@@ -19,17 +19,30 @@ public:
             return;
         }
         
-        helper(root->left,target);
-        
-        if(root->val == target){
+         if(root->val == target){
             lb = root->val;
             ub = root->val;
         }else if(root->val>target){
-            ub = min(ub,root->val);
+            ub = root->val;
+             helper(root->left,target);
         }else{
-            lb = max(lb,root->val);
+            lb = root->val;
+             helper(root->right,target);
         }
-        helper(root->right,target);
+        return;
+        
+        
+//         helper(root->left,target);
+        
+//         if(root->val == target){
+//             lb = root->val;
+//             ub = root->val;
+//         }else if(root->val>target){
+//             ub = min(ub,root->val);
+//         }else{
+//             lb = max(lb,root->val);
+//         }
+//         helper(root->right,target);
     }
     
     int closestValue(TreeNode* root, double target) {
