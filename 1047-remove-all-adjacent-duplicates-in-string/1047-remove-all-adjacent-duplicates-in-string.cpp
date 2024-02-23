@@ -1,20 +1,15 @@
 class Solution {
 public:
     string removeDuplicates(string s) {
-        stack<int> st;
+        // stack<int> st;
+        string res;
         for(int i=0;i<s.size();i++){
-            if(st.empty() || s[st.top()]!=s[i]){
-                st.push(i);
+            if(res.size()==0||res[res.size()-1]!= s[i]){
+                res.push_back(s[i]);
             }else{
-                st.pop();
+                res.pop_back();
             }
         }
-        string res="";
-        while(!st.empty()){
-            res += s[st.top()];
-            st.pop();
-        }
-        reverse(res.begin(),res.end());
         return res;
     }
 };
