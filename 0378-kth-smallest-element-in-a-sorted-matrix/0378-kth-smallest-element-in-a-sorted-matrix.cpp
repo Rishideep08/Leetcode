@@ -1,27 +1,25 @@
 class Solution {
 public:
-    int kthSmallest(vector<vector<int>>& matrix, int k) {
-        int n = matrix.size();
-        priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>> pq;
-        
-        for(int i=0;i<n;i++){
-            pq.push({matrix[i][0],i,0});
-        }
-        
-        while(k){
-            vector<int> temp = pq.top();
-            pq.pop();
-            k--;
-            if(k==0){
-                return temp[0];
+    //from left-bottom or right-top, count how many numbers are less equal than mid
+    int solve(vector<vector<int>>& matrix, int mid){
+        int count = 0, n = matrix.size(), i = 0, j = n-1;
+        while(i < n && j >= 0){
+            if(matrix[i][j] > mid) j--;
+            else{
+                count += (j+1);
+                i++;
             }
-            if(temp[2]+1<n){
-                pq.push({matrix[temp[1]][temp[2]+1],temp[1],temp[2]+1});
-            }
-
         }
-        return -1;
-        
-        
+        return count;
     }
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size(), i = matrix[0][0], j = matrix[n-1][n-1];
+        while(i < j){
+            int mid = i + (j-i)/2;
+            int posi = solve(matrix, mid);
+            if(posi < k) i = mid+1;
+            else j = mid;
+        }
+        return i;
+    }  
 };
